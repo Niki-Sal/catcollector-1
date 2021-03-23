@@ -5,6 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 # import models
 from .models import Cat
+# access the FeedingForm
+from .forms import FeedingForm
 
 # import Django form classes
 # these handle CRUD for us
@@ -47,7 +49,12 @@ def cats_show(request, cat_id):
     # we get access to that cat_id variable
     # query for the specific cat clicked
     cat = Cat.objects.get(id=cat_id)
-    return render(request, 'cats/show.html', { 'cat': cat })
+    # lets make a feeding_form, we imported it up page
+    feeding_form = FeedingForm()
+    return render(request, 'cats/show.html', { 
+      'cat': cat,
+      'feeding_form': feeding_form
+    })
 
 # Instrcutions
 # 1. Update index view function to look similar to the contact view function
