@@ -21,7 +21,7 @@ MEALS = (
 )
 
 class Feeding(models.Model):
-    # date = models.DateField('when are we getting feed'), creating a default in field
+   
     date = models.DateField()
     meal = models.CharField(
         max_length = 1,
