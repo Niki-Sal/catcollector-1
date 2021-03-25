@@ -6,10 +6,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 # import models
 from .models import Cat
 # access the FeedingForm
-from .forms import FeedingForm
+from .forms import FeedingForm, CatForm
 
 # import Django form classes
 # these handle CRUD for us
+# we will comment this one out
 class CatCreate(CreateView):
   model = Cat
   fields = '__all__'
@@ -49,24 +50,27 @@ def cats_show(request, cat_id):
     # we get access to that cat_id variable
     # query for the specific cat clicked
     cat = Cat.objects.get(id=cat_id)
-    # lets make a feeding_form, we imported it up page
+    # lets make a feeding_form
     feeding_form = FeedingForm()
     return render(request, 'cats/show.html', { 
       'cat': cat,
-      'feeding_form': feeding_form
+      'feeding_form': feeding_form 
     })
+
+# build out cats_create custom to use the userId
 
 # FEEDING
 def add_feeding(request, pk):
+  # this time we are passing the data from our request in that form
   form = FeedingForm(request.POST)
   # validate form.is_valid built in
   if form.is_valid():
-    # don't save yet! First lets add our cat_id
-    new_feeding = form.save(commit = False)
-    new_feeding.cat_id = pk # cats been added we can save
+    # don't save yet!! First lets add out cat_id
+    new_feeding = form.save(commit=False)
+    new_feeding.cat_id = pk
+    # cats been added we can save
     new_feeding.save()
   return redirect('cats_show', cat_id = pk)
-
 
 # Instrcutions
 # 1. Update index view function to look similar to the contact view function
