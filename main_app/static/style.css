@@ -1,16 +1,29 @@
 h1 {
   color: tomato;
 }
-a, a:visited {
+
+a {
   color: black;
   text-decoration: none;
 }
+nav li > a {
+  color: white;
+}
 a:hover {
   text-decoration: underline;
-  color: tomato;
 }
 .btn {
   padding: 2px;
   transition: all .5s ease-in-out;
   text-decoration: underline;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
 }
