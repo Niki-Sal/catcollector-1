@@ -5,6 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 #bring in some things to make auth easier
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+# Import the login_required decorator---> to be able to use @login_required
+from django.contrib.auth.decorators import login_required
 
 # import models
 from .models import Cat
@@ -20,6 +22,7 @@ from .forms import FeedingForm, CatForm
 #   success_url = '/cats'
 # not enough anymore, we need to associate a created cat with a user
 
+
 class CatUpdate(UpdateView):
   model = Cat
   fields = ['name', 'breed', 'description', 'age']
@@ -28,6 +31,7 @@ class CatUpdate(UpdateView):
     self.object = form.save(commit=False)
     self.object.save()
     return HttpResponseRedirect('/cats/' + str(self.object.pk))
+
 
 class CatDelete(DeleteView):
   model = Cat
@@ -46,10 +50,15 @@ def contact(request):
 
 
 # CATS
+# protect to be shown only for member user => @login_required or @login_required()(?!)
+@login_required
 def cats_index(request):
-    cats = Cat.objects.all()
+    # cats = Cat.objects.all()
+    # we want to have access to the user request.user - only cats that belong to one user
+    cats = Cat.objects.filter(user = request.user)
     return render(request, 'cats/index.html', { 'cats': cats })
 
+@login_required
 def cats_show(request, cat_id):
     # we get access to that cat_id variable
     # query for the specific cat clicked
@@ -60,8 +69,19 @@ def cats_show(request, cat_id):
       'cat': cat,
       'feeding_form': feeding_form 
     })
+# def cats_update(request, cat_id):
+#   # create a catform
+#   cat = Cat.objects.get(id=cat_id)
+#   print('***************')
+#   print(cat)
+#   catform = CatForm(cat)
+#   return render(request, 'cats/cat_form.html', {'form': catform })
+
+
+
 
 # build out cats_new custom to use the userId
+@login_required
 def cats_new(request):
   # create new instance of cat form filled with submitted values or nothing
   cat_form = CatForm(request.POST or None)
@@ -79,6 +99,7 @@ def cats_new(request):
     return render(request, 'cats/new.html', { 'cat_form': cat_form })
 
 # FEEDING
+@login_required
 def add_feeding(request, pk):
   # this time we are passing the data from our request in that form
   form = FeedingForm(request.POST)
@@ -113,6 +134,9 @@ def sign_up(request):
     'form': form, 
     'error_message': error_message
   })
+
+
+
   
 
 # Instrcutions
