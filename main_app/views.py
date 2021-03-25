@@ -50,26 +50,6 @@ def cats_show(request, cat_id):
     # we get access to that cat_id variable
     # query for the specific cat clicked
     cat = Cat.objects.get(id=cat_id)
-<<<<<<< HEAD
-    # lets make a feeding_form, we imported it up page
-    feeding_form = FeedingForm()
-    return render(request, 'cats/show.html', { 
-      'cat': cat,
-      'feeding_form': feeding_form
-    })
-
-# FEEDING
-def add_feeding(request, pk):
-  form = FeedingForm(request.POST)
-  # validate form.is_valid built in
-  if form.is_valid():
-    # don't save yet! First lets add our cat_id
-    new_feeding = form.save(commit = False)
-    new_feeding.cat_id = pk # cats been added we can save
-    new_feeding.save()
-  return redirect('cats_show', cat_id = pk)
-
-=======
     # lets make a feeding_form
     feeding_form = FeedingForm()
     return render(request, 'cats/show.html', { 
@@ -91,7 +71,6 @@ def add_feeding(request, pk):
     # cats been added we can save
     new_feeding.save()
   return redirect('cats_show', cat_id = pk)
->>>>>>> 82f2ddd45a340833896df4e4a64fded19b4efdc3
 
 # Instrcutions
 # 1. Update index view function to look similar to the contact view function
